@@ -34,6 +34,7 @@ router.get('/', function(req, res)
             }
             else{
                res.render('subscriptions', {user : decoded.user_id,
+                  's':[],
                   'session' : req.signedCookies.session});
             }
 
