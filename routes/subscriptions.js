@@ -2,7 +2,7 @@ var request  = require('request');
 var jwt      = require('jsonwebtoken');
 var crud     = require('../libs/crud');
 var auth     = require('../libs/auth');
-var subs     = require('../libs/subscriptions')
+var subs     = require('../libs/subscriptions');
 var config   = require('../libs/config');
 
 
@@ -27,11 +27,15 @@ router.get('/', function(req, res)
             if (err) {
                console.log(err)
             }
-
-            res.render('subscriptions', {user : decoded.user_id,
-               's': body,
-               'session' : req.signedCookies.session});
-
+            if(body !== undefined || body !== null){
+               res.render('subscriptions', {user : decoded.user_id,
+                  's': body,
+                  'session' : req.signedCookies.session});
+            }
+            else{
+               res.render('subscriptions', {user : decoded.user_id,
+                  'session' : req.signedCookies.session});
+            }
 
          });
       }
