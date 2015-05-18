@@ -51,10 +51,9 @@ function listAuthorizations(session)
 */
 
 
-function createClient(clientname, cdescription, session, cb)
+function createClient(clientname, cdescription, cisSE, session, cb)
 {
-
-   crud('POST', base + '/clients', {'name': clientname, 'description': cdescription}, session, cb);
+   crud('POST', base + '/clients', {'name': clientname, 'description': cdescription, 'isSE': cisSE}, session, cb);
 }
 
 function readClients(session, cb)

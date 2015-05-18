@@ -10,8 +10,6 @@ block content
             div.list-group
                 each sub in JSON.parse(s)
                     div.list-group-item
-                        //p.list-group-item-info
-                        //| Subscription Type: #{JSON.stringify(JSON.parse(s))}
 
                         p.list-group-item-text
                         |  <b>Subscribed Cloudlet:</b> #{sub['@id'].cloudletid}

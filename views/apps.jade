@@ -6,9 +6,9 @@ block header
 block content
 	p
 	each c in clients
-		h2 App Name: #{c.name}
-		p  Description: #{c.description}
-		p  API Key: #{c.api_key}
+		h2 App Name: &nbsp; #{c.name}
+		p  Description:&nbsp; #{c.description}
+		p  API Key: &nbsp; #{c.api_key}
 		//p  Secret Key: #{c.secret}
 		//a(href="/admin/editclient/#{c.api_key}") Manage App Permissions
 		a(href="/admin/permissions/#{c.api_key}") Manage App Permissions

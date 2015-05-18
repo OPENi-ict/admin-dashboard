@@ -7,26 +7,80 @@ var objectPatternExtract     = new RegExp(/0[a-f,0-9]{7}-[a-f,0-9]{4}-4[a-f,0-9]
 var apiKeyExtract            = new RegExp(/[a-z,0-9]{32}/gm);
 
 var types                    = {}
+var ses                      = {}
 
 
-$('#setPermissions2').click(function(){
-   var data = [ { "ref": "t_e782776271a49e49d1e1dc3f32ee59b1-535", "type": "type", "access_level": "APP", "access_type": "CREATE" }, { "ref": "t_e782776271a49e49d1e1dc3f32ee59b1-535", "type": "type", "access_level": "APP", "access_type": "READ" }, { "ref": "t_e782776271a49e49d1e1dc3f32ee59b1-535", "type": "type", "access_level": "APP", "access_type": "UPDATE" }, { "ref": "t_e782776271a49e49d1e1dc3f32ee59b1-535", "type": "type", "access_level": "APP", "access_type": "DELETE" }, { "ref": "t_57281a30ce2684932c5810e3d2884be5-247", "type": "type", "access_level": "APP", "access_type": "READ" }, { "ref": "t_57281a30ce2684932c5810e3d2884be5-247", "type": "type", "access_level": "APP", "access_type": "CREATE" }, { "ref": "t_a2c029fe882b2ad2fa630fc9f4556f32-259", "type": "type", "access_level": "APP", "access_type": "READ" }, { "ref": "t_a2c029fe882b2ad2fa630fc9f4556f32-259", "type": "type", "access_level": "APP", "access_type": "CREATE" }, { "ref": "t_11fe95b730bd42950e6b12208a25fe89-341", "type": "type", "access_level": "APP", "access_type": "READ" }, { "ref": "t_11fe95b730bd42950e6b12208a25fe89-341", "type": "type", "access_level": "APP", "access_type": "CREATE" }, { "ref": "00000001-5203-4f5b-df3e-7f06c795775d", "type": "object", "access_level": "CLOUDLET", "access_type": "READ" } ]
+$('#openAddServiceEnablerDialog').click(function(){
 
-   $("#inputData").val(JSON.stringify(data, undefined, 2));
-})
+   //list SEs then
+
+   $.ajax({
+      url: '/admin/ajax/list_service_enablers',
+      type: 'GET',
+      headers: {
+         "Content-Type": "application/json"
+      },
+      dataType: 'json',
+      success: function (data) {
+
+         var html = "<ul>"
+
+         for (var i = 0; i < data.length; i++){
+            html += "<li><input value='Add' type='button' class='addSEButton' desc='" + data[i].description + "' id='" + data[i].cloudlet + "' name='"+ data[i].name+"' > " + data[i].name + " : " + data[i].description + "</li>"
+         }
+
+         html += "</ul>"
+
+         $("#dialog-modal").html(html);
+         $("#dialog-modal").dialog( { "title" : ' Please select a service enabler' } );
+         $("#dialog-modal").dialog("open");
+
+         $(".addSEButton").click(function(){
+            var input = $(this)
+
+            var se = {
+               cloudlet    : input.attr("id"),
+               name        : input.attr("name"),
+               description : input.attr("desc")
+            }
+
+            ses[se.name.replace(" ", "-")] = se
+
+            $("#inputData").val($("#inputData").val() + " Service_Enabler:" + se.name.replace(" ", "-") );
+            $('#startEditing').click();
+
+            $("#dialog-modal").dialog("close");
+         })
+      },
+      error: function (data) {
+         alert("error " + JSON.stringify(data))
+      }
+   });
+
+
+});
 
 
 $('#setPermissions1').click(function(){
-   //var data = "t_fd88393b19f7d16d8f04767eeeafbfcb-240  t_546d208a88ec0144c72fe5509925ccb4-192"
 
-   var str = ""
+   var html = "<ul>"
 
    for (var i in graph_api_mappings){
-      str += i + " "
+      html += "<li><input value='Add' type='button' class='addGraphButton' name='"+ i +"' > " + i + "</li>"
    }
 
-   $("#inputData").val(str);
-   $('#startEditing').click()
+   html += "</ul>"
+
+   $("#dialog-modal").html(html);
+   $("#dialog-modal").dialog( { "title" : ' Please select a service enabler' } );
+   $("#dialog-modal").dialog("open");
+
+   $(".addGraphButton").click(function(){
+      var input = $(this)
+      $("#inputData").val($("#inputData").val() + " " + input.attr("name") );
+      $('#startEditing').click();
+   })
+
 })
 
 
@@ -49,7 +103,9 @@ $('#copyPermissions').click(function(){
    var arr_permissions = JSON.parse($("#outputData").text())
 
    var type_ids  = {}
+   var se_ids  = {}
    var type_arrs = []
+   var se_arrs   = []
 
    for ( var i = 0; i < arr_permissions.length; i++){
 
@@ -57,11 +113,18 @@ $('#copyPermissions').click(function(){
          var id = arr_permissions[i].ref
          type_ids[id] = id
       }
-   }
+      else if ("service_enabler" === arr_permissions[i].type ){
+         se_ids[arr_permissions[i].ref.replace(" ", "-")] = arr_permissions[i].ref.replace(" ", "-")
+      }
 
+   }
 
    for ( var i in type_ids ){
       type_arrs.push(types[i])
+   }
+
+   for ( var i in se_ids ){
+      se_arrs.push(ses[i])
    }
 
    var match = apiKeyExtract.exec(window.location.href)
@@ -69,9 +132,10 @@ $('#copyPermissions').click(function(){
    var app_api_key = $("#app_api_key").val()
 
    var data = {
-      "app_api_key" : app_api_key,
-      "permissions" : arr_permissions,
-      "types"       : type_arrs
+      "app_api_key"      : app_api_key,
+      "permissions"      : arr_permissions,
+      "types"            : type_arrs,
+      "service_enablers" : se_arrs
    }
 
    var sessionToken = $("#session").val()
@@ -112,11 +176,17 @@ var typeToDiv = function(p, name){
    else if (objectPatternMatch.test( p.ref )){
       html += '<div class="headingObject">Object <span class="removeFromPerms">Remove</span></div>'
    }
+   else {
+      html += '<div class="headingObject">Service Enabler <span class="removeFromPerms">Remove</span></div>'
+   }
 
 
    if ( objectPatternMatch.test( p.ref ) ){
       html += '<div class="immutable"> ID: ' + p.ref + '</div>'
       html += '<div><input type="checkbox" name="cloudlet_read" value="READ"> read <input type="checkbox" name="cloudlet_update" value="UPDATE"> update <input type="checkbox" name="cloudlet_delete" value="DELETE"> delete</div>'
+   }
+   else if (p.type === 'service_enabler'){
+      html += '<div>Service Enabler: <b>' + name + '</b></div>'
    }
    else{
       html += '<div class="immutable"> ID: ' + p.ref + ' <span  class="loadTypeDetails">Details</span></div>'
@@ -224,9 +294,21 @@ $('#startEditing').click(function(){
       for (var i = 0; i < words.length; i++){
          var word = words[i]
 
-         if ( undefined !== graph_api_mappings[word]){
+         if (0 === word.indexOf( "Service_Enabler:")){
+            word = word.replace("Service_Enabler:", "")
+            var se = ses[word]
+            var perm = {
+               ref  : se.name,
+               type : 'service_enabler'
+            }
 
-            var id = graph_api_mappings[word]
+            if ($('#instance_' + se.name ).length === 0) {
+               $('#editContainer').append(typeToDiv(perm, se.name))
+            }
+         }
+         else if ( undefined !== graph_api_mappings['Graph API ' + word]){
+
+            var id = graph_api_mappings['Graph API ' + word]
 
             var perm = {
                ref  : id,
@@ -234,7 +316,7 @@ $('#startEditing').click(function(){
             }
 
             if ($('#instance_' + id ).length === 0) {
-               $('#editContainer').append(typeToDiv(perm, word))
+               $('#editContainer').append(typeToDiv(perm, 'Graph API ' + word))
             }
          }
       }
@@ -333,26 +415,37 @@ var parsePermissions = function(){
       var id      = element.prop('id').replace('instance_', '')
       var type    = ( typePatternMatch.test(id ) ) ? 'type' : 'object'
 
-      element.find('input:checked').each(function(){
-         var input = $( this )
-         var name  = input.prop('name')
+      if (undefined !== ses[id.replace(" ", "-")]){
 
-         var aLevel = name.split('_')[0].toUpperCase()
-         var aType  = name.split('_')[1].toUpperCase()
-
-         var perm   = {
-            ref          : id,
-            type         : type,
-            access_level : aLevel,
-            access_type  : aType
+         var perm = {
+            ref         : id,
+            type        : "service_enabler"
          }
 
-         perms.push( perm )
-      })
+         perms.push(perm)
+      }
+      else{
+         element.find('input:checked').each(function() {
+            var input = $(this)
+            var name = input.prop('name')
 
+            var aLevel = name.split('_')[0].toUpperCase()
+            var aType = name.split('_')[1].toUpperCase()
+
+            var perm = {
+               ref         : id,
+               type        : type,
+               access_level: aLevel,
+               access_type : aType
+            }
+
+            perms.push(perm)
+         })
+      }
+
+      document.getElementById("outputData").innerHTML = JSON.stringify(perms, undefined, 2);
    })
 
-   document.getElementById("outputData").innerHTML = JSON.stringify(perms, undefined, 2);
 
    retrieveTypes()
 }

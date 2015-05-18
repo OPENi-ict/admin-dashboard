@@ -37,6 +37,21 @@ router.get('/', function(req, res)
 
             auth.readAppPermissions(req.signedCookies.session, app_api_key, function(err, data){
 
+               for (var i = 0; i < data.result.length; i++) {
+
+                  var e = data.result[i]
+                  if ( undefined !== e.service_enablers && null !== e.service_enablers){
+                     for (var j = 0; j < e.service_enablers.length; j++) {
+                        if (null !== data.result[i].service_enablers[j]){
+                           delete data.result[i].service_enablers[j].cloudlet
+                        }
+                     }
+                  }
+                  else{
+                     data.result[i].service_enablers = []
+                  }
+               }
+
                res.render('permissions', {user : decoded.user_id,
                   'c': client,
                   'p' : data,

@@ -34,6 +34,7 @@ var data            = require('./routes/data');
 var subscriptions   = require('./routes/subscriptions');
 var addSubscription = require('./routes/addSubscription');
 var aggregator      = require('./routes/aggregator');
+var ajax            = require('./routes/ajax');
 
 
 /*****************************
@@ -101,6 +102,7 @@ app.use('/admin/subscriptions*',    subscriptions);
 app.use('/admin/addSubscription',   addSubscription);
 app.use('/admin/typeRegistry',      typeRegistry);
 app.use('/admin/aggregator',        aggregator);
+app.use('/admin/ajax',              ajax);
 
 
 

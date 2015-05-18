@@ -50,3 +50,17 @@ body {
 	font-size: 150%;
 	font-weight: bold;
 }
+
+.modal-title {
+	color:#7f8177;
+}
+
+.well{
+	color:#7f8177;
+}
+
+.errorMessage{
+	font-size: 14px;
+	color:red;
+	margin-top: 10px;
+}

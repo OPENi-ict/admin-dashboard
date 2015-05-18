@@ -14,8 +14,7 @@ router.post('/', function(req, res)
 {
   if(!req.body.username || !req.body.password)
   {
-    res.redirect(400,'/');
-    //res.send('respond with a resource');
+    res.render('register', {"error" : "Register failed, please specify a username and a password"});
     return;
   }
   

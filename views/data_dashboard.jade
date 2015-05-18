@@ -13,13 +13,19 @@ block content
 				a(href="#")= cid
 	</div>
 	<div class="column-middle" style="float: left; width: 30%;height:200px; overflow: auto;">
+	<h3>Types</h3>
+	<ul id="type_id_list"></ul>
+	</div>
+	<div class="column-right" style="float: left; width: 30%;height:200px; overflow: auto;">
 	<h3>Objects</h3>
-	<ul id="id_list"></ul>
+	<ul id="object_id_list"></ul>
 	</div>
 
-	<div style="clear:both; width:100%">
+	<div id="data_container" style="clear:both; width:100%; display:none">
 	<h3>Data Record</h3>
 	<pre id="data"></pre>
+	<h3>Meta Data</h3>
+	<pre id="meta_data"></pre>
 	</div>
 	script(type='text/javascript', src="/admin/javascripts/md5.js")
 	script(type='text/javascript', src="/admin/javascripts/data.js")

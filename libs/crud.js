@@ -41,6 +41,13 @@ function read(db, id, cb)
 	crud('GET', base + '/' + db + '/' + id, null, cb);
 }
 
+
+function get(url, cb)
+{
+	crud('GET', url, null, cb);
+}
+
+
 function update(db, id, json, cb)
 {
 	crud('PUT', base + '/' + db + '/' + id, json, cb);
@@ -69,6 +76,7 @@ function query(query, cb)
 module.exports.create = create;
 module.exports.createNamed = createNamed;
 module.exports.read = read;
+module.exports.get = get;
 module.exports.update = update;
 module.exports.remove = remove;
 module.exports.patch = patch;

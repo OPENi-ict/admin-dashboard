@@ -13,7 +13,6 @@ var apiKeyExtract = new RegExp(/[a-z,0-9]{32}/m);
 
 router.get('/', function(req, res)
 {
-   //console.log("req", req.signedCookies.session)
 
    jwt.verify(req.signedCookies.session, config.key.verify, function (err, decoded) {
 
