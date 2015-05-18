@@ -68,13 +68,15 @@ router.get('/list_service_enablers', function(req, res)
 
          var se_list = []
 
-         for (var i = 0; i < body.rows.length; i++){
-            var se = body.rows[i]
-            se_list.push({
-               "name"        : se.value.name,
-               "description" : se.value.description,
-               "cloudlet"    : se.value.cloudlet
-            })
+         if (undefined !== body.rows){
+            for (var i = 0; i < body.rows.length; i++){
+               var se = body.rows[i]
+               se_list.push({
+                  "name"        : se.value.name,
+                  "description" : se.value.description,
+                  "cloudlet"    : se.value.cloudlet
+               })
+            }
          }
 
          res.setHeader('Content-Type', 'application/json');
