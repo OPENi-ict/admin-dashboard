@@ -5,6 +5,8 @@ block header
 
 block content
 	p
+	b Your Apps
+	br
 	each c in clients
 		h2 App Name: &nbsp; #{c.name}
 		p  Description:&nbsp; #{c.description}
@@ -16,5 +18,11 @@ block content
 		a(href="/admin/mockauth/#{c.api_key}") Create Mock Auth Tokens
 		br
 		br
-
+	br
+	br
+	b Your Service Enablers
+	br
+	each s in se
+		h2 App Name: &nbsp; #{s.name}
+		p  Description:&nbsp; #{s.description}
 

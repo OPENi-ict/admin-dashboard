@@ -18,7 +18,25 @@ router.get('/', function(req, res)
 
          auth.readClients(req.signedCookies.session, function(err, body)
          {
-            res.render('apps', {user : decoded.user_id, 'clients': body.result});
+            var apps = []
+            var se   = []
+
+            console.log (body)
+
+            if (undefined !== body.result) {
+               for (var i = 0; i < body.result.length; i++){
+                  var e = body.result[i]
+                  if (e.isSE){
+                     se.push(e)
+                  }
+                  else{
+                     apps.push(e)
+                  }
+               }
+            }
+
+
+            res.render('apps', {user : decoded.user_id, 'clients': apps, 'se' : se});
          });
       }
    });

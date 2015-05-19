@@ -415,10 +415,10 @@ var parsePermissions = function(){
       var id      = element.prop('id').replace('instance_', '')
       var type    = ( typePatternMatch.test(id ) ) ? 'type' : 'object'
 
-      if (undefined !== ses[id.replace(new RegExp(" ", 'g'), "-")]){
+      if (undefined !== ses[id.replace(new RegExp("_", 'g'), "-")]){
 
          var perm = {
-            ref         : id,
+            ref         : id.replace(new RegExp("_", 'g'), " "),
             type        : "service_enabler"
          }
 
