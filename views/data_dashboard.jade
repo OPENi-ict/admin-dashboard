@@ -5,20 +5,19 @@ block header
 
 block content
 	<div id="typesmain" class="wrapper">
-	<div class="column-left" style="float: left; width: 30%; height:200px; overflow: auto;">
+	<div class="column-left" style="float: left; width: 30%; min-height:330px;">
 	<h3>User Accounts</h3>
-	ul
-		each cid in cloudlets
-			li
-				a(href="#")= cid
+	ul#cloudlet_id_list
+	div#cloudlet_id_list_nav &nbsp;
 	</div>
-	<div class="column-middle" style="float: left; width: 30%;height:200px; overflow: auto;">
+	<div class="column-middle" style="float: left; width: 30%; min-height:330px;">
 	<h3>Types</h3>
 	<ul id="type_id_list"></ul>
 	</div>
-	<div class="column-right" style="float: left; width: 30%;height:200px; overflow: auto;">
+	<div class="column-right" style="float: left; width: 30%; min-height:330px;">
 	<h3>Objects</h3>
 	<ul id="object_id_list"></ul>
+	<div id="object_id_list_nav"></div>
 	</div>
 
 	<div id="data_container" style="clear:both; width:100%; display:none">
