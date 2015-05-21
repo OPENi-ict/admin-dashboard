@@ -1,7 +1,7 @@
 var request = require('request');
 
-var shortBase = 'https://' + '127.0.0.1' + ':443';
-var base      = 'https://' + '127.0.0.1' + ':443/api/v1/auth';
+var internalBase = 'https://' + '127.0.0.1' + ':8443';
+var base         = 'https://' + '127.0.0.1' + ':443/api/v1/auth';
 //var base = '/api/v1/auth';
 
 function IsJsonString(str) {
@@ -83,13 +83,13 @@ function createUser(username, password, cb)
 
 function readAppPermissions(session, app_api_key, cb)
 {
-   crud('GET', shortBase + '/api/v1/app_permissions/' + app_api_key, null, session, cb);
+   crud('GET', internalBase + '/api/v1/app_permissions/' + app_api_key, null, session, cb);
 }
 
 
 function persistPermissionsForUserAndClient(auth, perms, cb)
 {
-   crud('POST', shortBase + '/api/v1/permissions', perms.permissions, auth, cb);
+   crud('POST', internalBase + '/api/v1/permissions', perms.permissions, auth, cb);
 }
 
 module.exports.createClient       = createClient;

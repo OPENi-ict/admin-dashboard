@@ -141,12 +141,11 @@ $('#copyPermissions').click(function(){
    var sessionToken = $("#session").val()
 
    $.ajax({
-      url: '/api/v1/app_permissions/',
-      type: 'put',
+      url: '/admin/ajax/persist_app_perms',
+      type: 'PUT',
       data: JSON.stringify(data),
       headers: {
-         "Authorization" : sessionToken,
-         "Content-Type": "application/json"
+         "Content-Type"  : "application/json"
       },
       dataType: 'json',
       success: function (data) {

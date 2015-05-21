@@ -1,6 +1,5 @@
 var request = require('request');
-
-var base = '/api/v1/crud';
+var base    = '/api/v1/crud';
 
 function crud(method, uri, body, cb, auth)
 {
@@ -14,8 +13,9 @@ function crud(method, uri, body, cb, auth)
 		strictSSL: false
 	}, function (err, res, body)
 	{
-		if(body && body.error)
+		if(body && body.error) {
 			err = body.error;
+		}
 		cb(err, body);
 	});
 }
@@ -73,6 +73,12 @@ function query(query, cb)
 	crud('POST', base + '/query', query, cb);
 }
 
+function put(url, id, json, cb)
+{
+	crud('PUT', url, json, cb);
+}
+
+module.exports.crud = crud;
 module.exports.create = create;
 module.exports.createNamed = createNamed;
 module.exports.read = read;
