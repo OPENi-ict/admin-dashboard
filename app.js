@@ -15,21 +15,21 @@ var wrap = function(args) {
    var index = require('./routes/index')(args);
 
 // Simple_Auth
-   var register        = require('./routes/register')(args);
-   var login           = require('./routes/login')(args);
-   var logout          = require('./routes/logout')(args);
-   var registerClient  = require('./routes/registerClient')(args);
-   var typesBuilder    = require('./routes/typeBuilder')(args);
-   var apps            = require('./routes/apps')(args);
-   var permissions     = require('./routes/permissions')(args);
-   var mockauth        = require('./routes/mockauth')(args);
-   var addpermissions  = require('./routes/addpermissions')(args);
-   var typeRegistry    = require('./routes/typeRegistry')(args);
-   var data            = require('./routes/data')(args);
-   var subscriptions   = require('./routes/subscriptions')(args);
-   var addSubscription = require('./routes/addSubscription')(args);
-   var aggregator      = require('./routes/aggregator')(args);
-   var ajax            = require('./routes/ajax')(args);
+   var register        = require('./routes/register');
+   var login           = require('./routes/login');
+   var logout          = require('./routes/logout');
+   var registerClient  = require('./routes/registerClient');
+   var typesBuilder    = require('./routes/typeBuilder');
+   var apps            = require('./routes/apps');
+   var permissions     = require('./routes/permissions');
+   var mockauth        = require('./routes/mockauth');
+   var addpermissions  = require('./routes/addpermissions');
+   var typeRegistry    = require('./routes/typeRegistry');
+   var data            = require('./routes/data');
+   var subscriptions   = require('./routes/subscriptions');
+   var addSubscription = require('./routes/addSubscription');
+   var aggregator      = require('./routes/aggregator');
+   var ajax            = require('./routes/ajax');
 
 
    /*****************************
