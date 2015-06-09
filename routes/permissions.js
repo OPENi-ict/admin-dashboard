@@ -37,6 +37,18 @@ router.get('/', function(req, res)
 
             auth.readAppPermissions(req.signedCookies.session, app_api_key, function(err, data){
 
+               console.log("data", data)
+
+               //if (undefined === data){
+               //   res.render('permissions', {user : decoded.user_id,
+               //      'c': client,
+               //      'p' : {},
+               //      'session' : req.signedCookies.session,
+               //      'app_api_key' : app_api_key });
+               //
+               //   return;
+               //}
+
                for (var i = 0; i < data.result.length; i++) {
 
                   var e = data.result[i]
