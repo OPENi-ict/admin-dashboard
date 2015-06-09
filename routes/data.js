@@ -8,22 +8,23 @@ var jwt     = require('jsonwebtoken');
 var config  = require('../libs/config');
 var router  = express.Router();
 
-router.get('/', function(req, res){
+module.exports = function (cmd_args) {
 
-   jwt.verify(req.signedCookies.session, config.key.verify, function (err, decoded) {
+   var admin_dash_public_key = cmd_args.auth_server_public_key.replace(/'/g, "").replace(/"/g, '').replace(/\\n/g, "\n");
 
-      if (err) {
-         res.render('/admin/login')
-      }
-      else {
+   return function (req, res, next) {
+      jwt.verify(req.signedCookies.session, admin_dash_public_key, function (err, decoded) {
 
-         res.render('data_dashboard', {
-            'user'      : decoded.user_id,
-            'session'   : req.signedCookies.session
-         });
-      }
-   });
-});
+         if ( err ) {
+            res.render('/admin/login')
+         }
+         else {
 
-
-module.exports = router;
+            res.render('data_dashboard', {
+               'user'   : decoded.user_id,
+               'session': req.signedCookies.session
+            });
+         }
+      });
+   };
+};

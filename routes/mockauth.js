@@ -37,94 +37,95 @@ var getMockAuthToken = function(cid, client){
 }
 
 
-router.get('/', function(req, res)
-{
-   //console.log("req", req.signedCookies.session)
-   //get
+module.exports = function (cmd_args) {
 
-   jwt.verify(req.signedCookies.session, config.key.verify, function (err, decoded) {
+   var admin_dash_public_key = cmd_args.auth_server_public_key.replace(/'/g, "").replace(/"/g, '').replace(/\\n/g, "\n");
 
-      var total   = (undefined === req.query.total  )                                 ? 1    : req.query.total
-      var persist = (undefined !== req.query.persist && 'true' === req.query.persist) ? true : false
+   return function (req, res, next) {
 
-      if (err) {
-         res.render('/admin/login')
-      }
-      else {
-         auth.readClients(req.signedCookies.session, function(err, body)
-         {
-            var match       = apiKeyExtract.exec(req.baseUrl)
+      jwt.verify(req.signedCookies.session, admin_dash_public_key, function (err, decoded) {
 
-            var app_api_key = (null !== match && match.length > 0 ) ? match[0] : ''
+         var total = (undefined === req.query.total  ) ? 1 : req.query.total
+         var persist = (undefined !== req.query.persist && 'true' === req.query.persist) ? true : false
 
-            var client = {}
+         if ( err ) {
+            res.render('/admin/login')
+         }
+         else {
+            auth.readClients(req.signedCookies.session, function (err, body) {
+               var match = apiKeyExtract.exec(req.baseUrl)
 
-            for ( var i in body.result){
-               if (app_api_key === body.result[i].api_key){
-                  client = body.result[i]
-               }
-            }
+               var app_api_key = (null !== match && match.length > 0 ) ? match[0] : ''
 
-            var mock_cloudlets = []
+               var client = {}
 
-            for ( var i = 0; i < total; i++){
-               var str = 'c_0000000000000000000000000000'
-               if (i < 10){
-                  str += '000'
-               }
-               else if (i < 100){
-                  str += '00'
-               }
-               else if (i < 1000){
-                  str += '0'
-               }
-               else{
-                  break;
-               }
-               str += i
-
-               mock_cloudlets.push({'id' : str, 'token' : getMockAuthToken(str, client)})
-            }
-
-            auth.readAppPermissions(req.signedCookies.session, app_api_key, function(err, data){
-
-               var client_latest_perms = data.result[data.result.length -1]
-
-               var success_function = function(){
-                  res.render('mockauth', {user : decoded.user_id,
-                     'c'              : client,
-                     'mock_cloudlets' : mock_cloudlets,
-                     'total'          : total,
-                     'pe'             : client_latest_perms,
-                     'session'        : req.signedCookies.session,
-                     'app_api_key'    : app_api_key });
-               }
-
-               if (persist){
-                  //loop through the mock_cloudlets
-                  //call POST permisssions endpoint for all of them
-                  for ( var i = 0; i < mock_cloudlets.length; i++){
-                     var entry = mock_cloudlets[i]
-
-                     auth.persistPermissionsForUserAndClient(entry.token, client_latest_perms, function(err, body){
-                        //console.log('err', err)
-                        //console.log('body', body)
-                     })
-
+               for ( var i in body.result ) {
+                  if ( app_api_key === body.result[i].api_key ) {
+                     client = body.result[i]
                   }
-                  success_function()
-               }
-               else{
-                  success_function()
                }
 
-            })
-         });
-      }
-   });
+               var mock_cloudlets = []
+
+               for ( var i = 0; i < total; i++ ) {
+                  var str = 'c_0000000000000000000000000000'
+                  if ( i < 10 ) {
+                     str += '000'
+                  }
+                  else if ( i < 100 ) {
+                     str += '00'
+                  }
+                  else if ( i < 1000 ) {
+                     str += '0'
+                  }
+                  else {
+                     break;
+                  }
+                  str += i
+
+                  mock_cloudlets.push({ 'id': str, 'token': getMockAuthToken(str, client) })
+               }
+
+               auth.readAppPermissions(req.signedCookies.session, app_api_key, function (err, data) {
+
+                  var client_latest_perms = data.result[data.result.length - 1]
+
+                  var success_function = function () {
+                     res.render('mockauth', {
+                        user            : decoded.user_id,
+                        'c'             : client,
+                        'mock_cloudlets': mock_cloudlets,
+                        'total'         : total,
+                        'pe'            : client_latest_perms,
+                        'session'       : req.signedCookies.session,
+                        'app_api_key'   : app_api_key
+                     });
+                  }
+
+                  if ( persist ) {
+                     //loop through the mock_cloudlets
+                     //call POST permisssions endpoint for all of them
+                     for ( var i = 0; i < mock_cloudlets.length; i++ ) {
+                        var entry = mock_cloudlets[i]
+
+                        auth.persistPermissionsForUserAndClient(entry.token, client_latest_perms, function (err, body) {
+                           //console.log('err', err)
+                           //console.log('body', body)
+                        })
+
+                     }
+                     success_function()
+                  }
+                  else {
+                     success_function()
+                  }
+
+               })
+            });
+         }
+      });
 
 
-});
+   };
+};
 
-
-module.exports = router;

@@ -6,36 +6,31 @@ var cookieParser = require('cookie-parser');
 var bodyParser   = require('body-parser');
 var engines      = require('consolidate');
 
+var config = {
+   trusted_public_key: '-----BEGIN PUBLIC KEY-----\n'+
+   'MFwwDQYJKoZIhvcNAQEBBQADSwAwSAJBAKT8kGk6ZNo3sC4IIo29leRLVD23T2r0\n'+
+   'vWXBEkk2pV42HsxKAmPs789AGHH9XwbGpD7FvrcBWWgb65v32Hg/NGkCAwEAAQ==\n'+
+   '-----END PUBLIC KEY-----'
+}
+
 var wrap = function(args) {
 
    /*****************************
     *       IMPLEMENT ROUTES     *
     *****************************/
 // Overview Dashboard
-   var index = require('./routes/index')(args);
+   if (args.auth_server_public_key == undefined){
+      args.auth_server_public_key = config.trusted_public_key
+   }
 
-// Simple_Auth
-   var register        = require('./routes/register');
-   var login           = require('./routes/login');
-   var logout          = require('./routes/logout');
-   var registerClient  = require('./routes/registerClient');
-   var typesBuilder    = require('./routes/typeBuilder');
-   var apps            = require('./routes/apps');
-   var permissions     = require('./routes/permissions');
-   var mockauth        = require('./routes/mockauth');
-   var addpermissions  = require('./routes/addpermissions');
-   var typeRegistry    = require('./routes/typeRegistry');
-   var data            = require('./routes/data');
-   var subscriptions   = require('./routes/subscriptions');
-   var addSubscription = require('./routes/addSubscription');
-   var aggregator      = require('./routes/aggregator');
-   var ajax            = require('./routes/ajax');
 
 
    /*****************************
     *        INITIALIZE APP      *
     *****************************/
    var app = express();
+
+   var routes = require('./routes/routes')(args);
 
 // view engine setup
    app.set('views', path.join(__dirname, 'views'));
@@ -78,27 +73,7 @@ var wrap = function(args) {
       }
    });
 
-   app.use('/', login);
-
-   app.use('/admin/register',          register);
-   app.use('/admin',                   index);
-   app.use('/admin/login',             login);
-   app.use('/login',                   login);
-   app.use('/admin/logout',            logout);
-   app.use('logout',                   logout);
-   app.use('/admin/dashboard',         index);
-   app.use('/admin/registerClient',    registerClient);
-   app.use('/admin/data',              data);
-   app.use('/admin/typeBuilder',       typesBuilder);
-   app.use('/admin/apps',              apps);
-   app.use('/admin/permissions*',      permissions);
-   app.use('/admin/addpermissions*',   addpermissions);
-   app.use('/admin/mockauth*',         mockauth);
-   app.use('/admin/subscriptions*',    subscriptions);
-   app.use('/admin/addSubscription',   addSubscription);
-   app.use('/admin/typeRegistry',      typeRegistry);
-   app.use('/admin/aggregator',        aggregator);
-   app.use('/admin/ajax',              ajax);
+   app.use('/admin', routes);
 
 
 // catch 404 and forward to error handler
