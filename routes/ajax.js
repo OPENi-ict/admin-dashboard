@@ -61,7 +61,7 @@ module.exports = function (cmd_args) {
          else {
             var data = req.body;
 
-            var path = 'https://localhost:8443/api/v1/app_permissions/'
+            var path = 'https://localhost:8443/api/v1/app_permissions/';
 
             crud.crud("PUT", path, data, function (err, body) {
 
@@ -94,13 +94,13 @@ module.exports = function (cmd_args) {
             res.end({ "error": err });
          }
          else {
-            var body = JSON.parse(body)
+            var body = JSON.parse(body);
 
-            var se_list = []
+            var se_list = [];
 
             if ( undefined !== body.rows ) {
                for ( var i = 0; i < body.rows.length; i++ ) {
-                  var se = body.rows[i]
+                  var se = body.rows[i];
                   se_list.push({
                      "name"       : se.value.name,
                      "description": se.value.description,
