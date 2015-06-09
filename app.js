@@ -46,7 +46,7 @@ var wrap = function(args) {
 //app.engine('html', engines.hogan);
    app.set('view engine', 'jade');
 
-   app.engine('.ejs', require('ejs').renderFile);
+   //app.engine('.ejs', require('ejs').renderFile);
 
 //app.set('view engine', 'ejs');
 

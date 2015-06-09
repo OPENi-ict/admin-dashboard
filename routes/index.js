@@ -8,10 +8,15 @@ module.exports = function(config) {
    /* GET home page. */
    router.get('/', function (req, res) {
 
+      config.auth_server_public_key = config.auth_server_public_key.replace(/'/g, "").replace(/"/g, '').replace(/\\n/g, "\n")
+
+
+      console.log("config.auth_server_public_key", config.auth_server_public_key)
+
       jwt.verify(req.signedCookies.session, config.auth_server_public_key, function (err, decoded) {
 
          if (err) {
-            res.render('/admin/login')
+            res.render('login')
          }
          else {
             res.render('index', {
