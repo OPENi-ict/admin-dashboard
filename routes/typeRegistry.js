@@ -37,10 +37,9 @@ var getMockAuthToken = function(cid, client){
 }
 
 
-router.get('/', function(req, res)
-{
-  res.render('typeRegistry');
-});
+module.exports = function (cmd_args) {
+   return function (req, res, next) {
+      res.render('typeRegistry');
+   };
+};
 
-
-module.exports = router;
