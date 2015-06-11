@@ -6,7 +6,10 @@ block header
     include ./header-navbar.jade
 block content
     p AGGREGATOR
-    textarea.form-control.aggBody(rows="3",placeholder="{}")
+    textarea.form-control.aggBody(rows="10",placeholder="{}") {
+        |"types"   : ["t_0230624bee7e2578b688b2dc15d1aee6-389"],
+        |"where"   : ["`@data`.`lat` BETWEEN 30 AND 50"],
+        |"fields"  : ["MAX(`@data`.`long`)", "MIN(`@data`.`long`)", "COUNT(`@data`.`long`)",  "AVG(`@data`.`long`)"] }
     button.btn#aggReq Run Request
 
 

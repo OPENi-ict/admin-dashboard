@@ -6,20 +6,20 @@ $('#aggReq').click(function() {
 
    var sessionToken = $("#session").val();
 
-   body = $(".aggBody").val();
+   var body = $(".aggBody").val();
 
    $.ajax({
       url: '/api/v1/aggregator',
       type: 'post',
-      data: JSON.stringify(),
+      data: body,
       headers: {
          "Authorization" : sessionToken,
          "Content-Type": "application/json"
       },
       dataType: 'json',
       success: function (data) {
-         $("#dialog-modal").html('<pre>Aggregated Response: ' + JSON.stringify(data) + '</pre>');
-         $("#dialog-modal").dialog( { "title" : data['@id'] + ' created' } );
+         $("#dialog-modal").html('Aggregated Response: <pre>' + JSON.stringify(data, null, 2) + '</pre>');
+         $("#dialog-modal").dialog( { "title" : 'Result' } );
          $("#dialog-modal").dialog("open");
       },
       error: function (data) {
