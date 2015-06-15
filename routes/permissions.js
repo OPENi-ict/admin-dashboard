@@ -63,6 +63,8 @@ module.exports = function (cmd_args) {
                      else {
                         data.result[i].service_enablers = []
                      }
+
+                     break;
                   }
 
                   res.render('permissions', {

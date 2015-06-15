@@ -25,13 +25,12 @@ block content
 	br
 	h2 Permission Details
 	br
-	p Total Permissions: #{p.meta.total_count}
 	p
 	hr
-	a(href="/admin/addpermissions/#{c.api_key}") ADD new App Permissions
+	a(href="/admin/addpermissions/#{c.api_key}") Set App Permissions
 	hr
 	p
-	if pe
+	if p.result
 		each pe in p.result
 			p Date: #{pe._date_created}
 			p Permissions: <pre>#{JSON.stringify(pe.permissions, null, 2)}</pre>
