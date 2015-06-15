@@ -11,7 +11,11 @@ router.get('/', function (req, res) {
 // POST route to register
 module.exports = function (cmd_args) {
 
-   return function (req, res, next) {
+   router.get('/', function (req, res) {
+      res.render('register');
+   });
+
+   router.post('/', function (req, res) {
       if ( !req.body.username || !req.body.password ) {
          res.render('register', { "error": "Register failed, please specify a username and a password" });
          return;
@@ -40,6 +44,7 @@ module.exports = function (cmd_args) {
             res.redirect('/admin');
          });
       });
-   };
+   });
+   return router
 };
 
