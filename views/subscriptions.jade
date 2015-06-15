@@ -4,22 +4,28 @@ extends main-container
 block header
     include ./header-navbar.jade
 block content
+    script(type='text/javascript', src="/admin/javascripts/jquery.timeago.js")
     div.row.clearfix
         h2 Subscriptions
         div.col-md-8.column
             div.list-group
-                each sub in JSON.parse(s)
+                each sub in s
                     div.list-group-item
 
                         p.list-group-item-text
-                        |  <b>Subscribed Cloudlet:</b> #{sub['@id'].cloudletid}
+                        |  <b>OPENi Client:</b> #{sub['@data']['client_id']}
 
                         p.list-group-item-text
-                        |  <b>Type:</b> #{sub['@id'].notification_type}
+                        |  <b>Notification Type:</b> #{sub['@data']['notification_type']}
 
                         p.list-group-item-text
-                        |  <b>Date Created:</b> #{sub['@id']._date_created}
+                        |  <b>Date Created:</b> #[abbr.timeago(title="#{sub['_date_created']}")]
             div
                 a(href="addSubscription")
                     button.btn Add Subscription
         div.col-md-4.column
+
+    script.
+        jQuery(document).ready(function () {
+            jQuery("abbr.timeago").timeago();
+        });

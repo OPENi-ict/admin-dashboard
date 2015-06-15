@@ -24,12 +24,25 @@ module.exports = function (cmd_args) {
          }
          else {
 
-            res.render('addSubscription', {
-               user     : decoded.user_id,
-               'session': req.signedCookies.session
-            });
+            auth.readClients(req.signedCookies.session, function (err, body) {
+               var apps = [];
+               var se = [];
+
+               if ( undefined !== body.result ) {
+                  for ( var i = 0; i < body.result.length; i++ ) {
+                     var e = body.result[i];
+                     apps.push(e)
+                  }
+               }
+
+               res.render('addSubscription', {
+                  user     : decoded.user_id,
+                  'session': req.signedCookies.session,
+                  'clients': apps
+               });
 
 
+            })
          }
 
       });

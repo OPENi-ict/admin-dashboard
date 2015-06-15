@@ -28,6 +28,12 @@ function getSubscriptions(session, cb)
    crud('GET', base + '/subscription', null, session, cb);
 }
 
+function getOPENiSubscriptions(session, cb)
+{
+   crud('GET', base + '/objects?type='+'t_9de6b0dfdd4bb308a33129fb8033b49c-741&order=descending', null, session, cb);
+}
+
 
 module.exports.getSubscriptions = getSubscriptions;
+module.exports.getOPENiSubscriptions = getOPENiSubscriptions;
 module.exports.base = base;

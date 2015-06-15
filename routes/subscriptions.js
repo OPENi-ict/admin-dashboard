@@ -24,14 +24,18 @@ module.exports = function (cmd_args) {
          }
          else {
 
-            subs.getSubscriptions(req.signedCookies.session, function (err, body) {
+            subs.getOPENiSubscriptions(req.signedCookies.session, function (err, body) {
+
+               console.log(JSON.parse(body)['result'])
+
                if ( err ) {
                   console.log(err)
                }
-               if ( body !== undefined || body !== null ) {
+               if ( body !== undefined || body !== null || body['result'].length !== 0) {
+                  body = JSON.parse(body);
                   res.render('subscriptions', {
                      user     : decoded.user_id,
-                     's'      : body,
+                     's'      : body['result'],
                      'session': req.signedCookies.session
                   });
                }

@@ -6,14 +6,14 @@ block header
 block content
     div.row.clearfix
         br
-        div.col-md-6.column
+        div.col-md-4.column
             div.SubscriptionForm
-                p Cloudlet Id:
-                input#cloudletID(type="text")
+                p Client Id:
+                select#clientID
+                    each c in clients
+                        option(key="#{c.api_key}") #{c.name}
                 p Type Id:
                 input#typeID(type="text")
-                p Object Id:
-                input#objectID(type="text")
                 p Notification Type
                 select#notifType
                     option(key="sse") Server-Sent Event
@@ -22,16 +22,20 @@ block content
                     option(key="gcm") Android Notification
                 p.endpoint.hidden#endpointLabel
                 input.endpoint.hidden#endpoint(type="text")
+                p.datafield.hidden#dataLabel
+                input.datafield.hidden#data(type="text",placeholder="Optional")
             button.btn#buildSub Build Subscription
 
-        div.col-md-6.column
+        div.col-md-8.column
             b Subscription Object:
                 pre#subObject
-            //button.btn#createSub Create Subscription
+            button.btn.hidden#createSub Create Subscription
 
     div#dialog-modal(title="Basic modal dialog",style="display: none;")
     input.hidden(id="session", name="session", value="#{session}")
     input.hidden(id="app_api_key", name="app_api_key", value="#{app_api_key}")
 
+    script(type='text/javascript', src="/admin/javascripts/types.js")
     script(type='text/javascript', src="/admin/javascripts/subscriptions.js")
+
 
