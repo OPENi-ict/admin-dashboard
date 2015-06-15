@@ -7,22 +7,35 @@ block content
 	p
 	b Your Apps
 	br
+	br
 	each c in clients
-		h2 App Name: &nbsp; #{c.name}
-		p  Description:&nbsp; #{c.description}
-		p  API Key: &nbsp; #{c.api_key}
-		//p  Secret Key: #{c.secret}
-		//a(href="/admin/editclient/#{c.api_key}") Manage App Permissions
-		a(href="/admin/permissions/#{c.api_key}") Manage App Permissions
-		br
-		a(href="/admin/mockauth/#{c.api_key}") Create Mock Auth Tokens
-		br
-		br
+		div.panel.panel-default
+			div.panel-body
+				div.row
+					div.col-md-2 Application Name:
+					div.col-md-10 #{c.name}
+				div.row
+					div.col-md-2 API Key:
+					div.col-md-10 #{c.api_key}
+				div.row
+					div.col-md-2 App Description:
+					div.col-md-10 #{c.description}
+				div.row &nbsp;
+				div.row
+					div.col-md-3
+						a(href="/admin/permissions/#{c.api_key}") Manage App Permissions
+					div.col-md-3
+						a(href="/admin/mockauth/#{c.api_key}") Create Mock Auth Tokens
 	br
 	br
 	b Your Service Enablers
 	br
 	each s in se
-		h2 App Name: &nbsp; #{s.name}
-		p  Description:&nbsp; #{s.description}
+		div.panel.panel-default
+			div.panel-body
+				div.row
+					div.col-md-4
+						h2 App Name: &nbsp; #{s.name}
+				div.row
+					div.col-md-10 Description:&nbsp; #{s.description}
 

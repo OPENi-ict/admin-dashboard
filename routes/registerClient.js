@@ -37,7 +37,7 @@ module.exports = function(cmd_args) {
                });
                return;
             }
-            console.log(req.body)
+            //console.log(req.body)
             var isSE = (undefined !== req.body.cisSE && 'on' === req.body.cisSE) ? true : false;
             auth.createClient(req.body.clientname, req.body.cdescription, isSE, req.signedCookies.session, function (err, body) {
                res.redirect('apps');
