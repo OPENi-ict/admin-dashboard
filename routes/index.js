@@ -11,8 +11,6 @@ module.exports = function(config) {
       config.auth_server_public_key = config.auth_server_public_key.replace(/'/g, "").replace(/"/g, '').replace(/\\n/g, "\n")
 
 
-      console.log("config.auth_server_public_key", config.auth_server_public_key)
-
       jwt.verify(req.signedCookies.session, config.auth_server_public_key, function (err, decoded) {
 
          if (err) {

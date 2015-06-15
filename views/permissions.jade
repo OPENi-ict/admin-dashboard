@@ -31,14 +31,17 @@ block content
 	a(href="/admin/addpermissions/#{c.api_key}") ADD new App Permissions
 	hr
 	p
-	each pe in p.result
-		p Date: #{pe._date_created}
-		p Permissions: <pre>#{JSON.stringify(pe.permissions, null, 2)}</pre>
-		p Types: <pre>#{JSON.stringify(pe.types, null, 2)}</pre>
-		p Service Enablers: <pre>#{JSON.stringify(pe.service_enablers, null, 2)}</pre>
+	if pe
+		each pe in p.result
+			p Date: #{pe._date_created}
+			p Permissions: <pre>#{JSON.stringify(pe.permissions, null, 2)}</pre>
+			p Types: <pre>#{JSON.stringify(pe.types, null, 2)}</pre>
+			p Service Enablers: <pre>#{JSON.stringify(pe.service_enablers, null, 2)}</pre>
+			br
+			hr
+			br
 		br
-		hr
-		br
-	br
+	else
+		div Permissions have not been set for this application yet.
 
 	<script src="/admin/javascripts/list_permissions.js"  type="text/javascript"></script>

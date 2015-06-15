@@ -38,7 +38,7 @@ module.exports = function (cmd_args) {
 
                auth.readAppPermissions(req.signedCookies.session, app_api_key, function (err, data) {
 
-                  console.log("data", data)
+                  //console.log("data", data)
 
                   //if (undefined === data){
                   //   res.render('permissions', {user : decoded.user_id,

@@ -24,8 +24,6 @@ module.exports = function (cmd_args) {
                var apps = [];
                var se = [];
 
-               console.log(body);
-
                if ( undefined !== body.result ) {
                   for ( var i = 0; i < body.result.length; i++ ) {
                      var e = body.result[i];
