@@ -20,7 +20,7 @@ module.exports = function (cmd_args) {
             var selectedCloudlet = req.query.selected;
 
             var start = encodeURIComponent("[\"" + decoded.cloudlet + "\", \"" + selectedCloudlet + "\"]");
-            var end = encodeURIComponent("[\"" + decoded.cloudlet + "\", \"" + selectedCloudlet + "^\"]");
+            var end   = encodeURIComponent("[\"" + decoded.cloudlet + "\", \"" + selectedCloudlet + "^\"]");
 
             var view_url = 'http://localhost:8092/objects/_design/objects_views/_view/object_by_third_party_type?startkey=' + start + '&endkey=' + end + '&group_level=3&stale=false&limit=100';
 
@@ -61,6 +61,18 @@ module.exports = function (cmd_args) {
          else {
             var data = req.body;
 
+            for (var i = 0; i < data.permissions.length; i++){
+
+               if ("service_enabler" === data.permissions[i].type){
+                  for (var j = 0; j < data.service_enablers.length; j++){
+                     if (data.service_enablers[j].name === data.permissions[i].ref){
+                        data.permissions[i].cloudlet = data.service_enablers[j].cloudlet
+                        data.permissions[i].app_id   = data.service_enablers[j].app_id
+                     }
+                  }
+               }
+            }
+
             var path = 'https://localhost:8443/api/v1/app_permissions/';
 
             crud.crud("PUT", path, data, function (err, body) {
@@ -87,7 +99,6 @@ module.exports = function (cmd_args) {
 
       crud.get(view_url, function (err, body) {
 
-
          if ( undefined !== err && null !== err ) {
 
             res.setHeader('Content-Type', 'application/json');
@@ -104,7 +115,8 @@ module.exports = function (cmd_args) {
                   se_list.push({
                      "name"       : se.value.name,
                      "description": se.value.description,
-                     "cloudlet"   : se.value.cloudlet
+                     "cloudlet"   : se.value.cloudlet,
+                     "app_id"     : se.value.api_key
                   })
                }
             }

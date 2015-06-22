@@ -26,7 +26,8 @@ $('#openAddServiceEnablerDialog').click(function(){
          var html = "<ul>"
 
          for (var i = 0; i < data.length; i++){
-            html += "<li><input value='Add' type='button' class='addSEButton' desc='" + data[i].description + "' id='" + data[i].cloudlet + "' name='"+ data[i].name+"' > " + data[i].name + " : " + data[i].description + "</li>"
+            console.log(data[i])
+            html += "<li><input value='Add' type='button' class='addSEButton' desc='" + data[i].description + "' id='" + data[i].cloudlet + "' app_id='" + data[i].app_id + "'  name='"+ data[i].name+"' > " + data[i].name + " : " + data[i].description + "</li>"
          }
 
          html += "</ul>"
@@ -40,6 +41,7 @@ $('#openAddServiceEnablerDialog').click(function(){
 
             var se = {
                cloudlet    : input.attr("id"),
+               app_id      : input.attr("app_id"),
                name        : input.attr("name"),
                description : input.attr("desc")
             }
@@ -126,8 +128,6 @@ $('#copyPermissions').click(function(){
    for ( var i in se_ids ){
       se_arrs.push(ses[i])
    }
-
-   var match = apiKeyExtract.exec(window.location.href)
 
    var app_api_key = $("#app_api_key").val()
 

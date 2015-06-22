@@ -53,10 +53,19 @@ module.exports = function (cmd_args) {
                   for ( var i = 0; i < data.result.length; i++ ) {
 
                      var e = data.result[i]
+
+                     for ( var j = 0; j < e.permissions.length; j++ ) {
+                        if ( null !== data.result[i].permissions[j] ) {
+                           delete data.result[i].permissions[j].cloudlet
+                           delete data.result[i].permissions[j].app_id
+                        }
+                     }
+
                      if ( undefined !== e.service_enablers && null !== e.service_enablers ) {
                         for ( var j = 0; j < e.service_enablers.length; j++ ) {
                            if ( null !== data.result[i].service_enablers[j] ) {
                               delete data.result[i].service_enablers[j].cloudlet
+                              delete data.result[i].service_enablers[j].app_id
                            }
                         }
                      }
