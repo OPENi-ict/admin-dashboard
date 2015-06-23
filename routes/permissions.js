@@ -30,29 +30,23 @@ module.exports = function (cmd_args) {
 
                var client = {}
 
-               for ( var i in body.result ) {
-                  if ( app_api_key === body.result[i].api_key ) {
-                     client = body.result[i]
+               for ( var k in body.result ) {
+                  if ( app_api_key === body.result[k].api_key ) {
+                     client = body.result[k]
                   }
                }
 
                auth.readAppPermissions(req.signedCookies.session, app_api_key, function (err, data) {
 
-                  //console.log("data", data)
-
-                  //if (undefined === data){
-                  //   res.render('permissions', {user : decoded.user_id,
-                  //      'c': client,
-                  //      'p' : {},
-                  //      'session' : req.signedCookies.session,
-                  //      'app_api_key' : app_api_key });
-                  //
-                  //   return;
-                  //}
+                  var new_data = {result : []}
 
                   for ( var i = 0; i < data.result.length; i++ ) {
 
                      var e = data.result[i]
+
+                     if (i >= 1){
+                        continue
+                     }
 
                      for ( var j = 0; j < e.permissions.length; j++ ) {
                         if ( null !== data.result[i].permissions[j] ) {
@@ -73,13 +67,13 @@ module.exports = function (cmd_args) {
                         data.result[i].service_enablers = []
                      }
 
-                     break;
+                     new_data.result.push(data.result[i])
                   }
 
                   res.render('permissions', {
                      user         : decoded.user_id,
                      'c'          : client,
-                     'p'          : data,
+                     'p'          : new_data,
                      'session'    : req.signedCookies.session,
                      'app_api_key': app_api_key
                   });
@@ -87,8 +81,6 @@ module.exports = function (cmd_args) {
             });
          }
       });
-
-
    };
 };
 
