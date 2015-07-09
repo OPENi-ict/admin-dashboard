@@ -26,7 +26,7 @@ module.exports = function (cmd_args) {
 
             subs.getOPENiSubscriptions(req.signedCookies.session, function (err, body) {
 
-               console.log(JSON.parse(body)['result'])
+               //console.log(JSON.parse(body)['result']);
 
                if ( err ) {
                   console.log(err)

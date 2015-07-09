@@ -14,6 +14,7 @@ module.exports = function(config) {
       jwt.verify(req.signedCookies.session, config.auth_server_public_key, function (err, decoded) {
 
          if (err) {
+            console.log(err);
             res.render('login')
          }
          else {
